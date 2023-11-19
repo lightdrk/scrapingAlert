@@ -3,8 +3,9 @@ import time
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 
 def filterNumber(number):
     num = ''
@@ -16,21 +17,47 @@ def filterNumber(number):
             continue
     return int(num)
 
+def eventtim(driver, url):
+    driver.get(url)
 
-def eventtim(tag):
-    driver = webdriver.Chrome()
-    driver.get(f"https://www.eventim.de/search/?affiliate=EVE&searchterm={tag}")
-    time.sleep(5)
-    html = driver.page_source
-    script = '''return document.querySelectorAll("div[class='search-result-content']")[0].outerText'''
-    text = driver.execute_script(script)
-    html = driver.page_source
-    soup = BeautifulSoup(html,"html.parser")
-    list_ticket_name = soup.find_all("div", class_="event-listing-city theme-text-color")
-    new_ticket_name = []
-    for n in list_ticket_name:
-        new_ticket_name.append(n.text)
-    number = filterNumber(text)
+    # Wait for the entire page to load
+    WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.TAG_NAME, 'body')))
 
-    return [number, new_ticket_name]
+    try:
+        # Wait for the button to be clickable
+        add_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, 'add_button_id')))
+        # If the button is clickable, click it
+        add_button.click()
+
+    except TimeoutException:
+        # Handle the timeout exception
+        print("Timeout waiting for the button to be clickable.")
+
+    # JavaScript code to disable the button based on conditions
+    script = """
+        var addButton = document.getElementById('add_button_id');
+        var ticketsAvailable = 10;  // Replace with the actual number of available tickets
+        var all_tickets_sold = false;  // Replace with the actual condition
+
+        if (ticketsAvailable <= 0 || all_tickets_sold) {
+            addButton.disabled = true;
+        } else {
+            addButton.disabled = false;
+        }
+    """
+
+    # Execute the JavaScript script
+    driver.execute_script(script)
+
+    # Perform additional actions if needed
+
+Create the driver outside the function
+driver = webdriver.Chrome()
+
+Call the function with the driver
+eventtim(driver, "https://www.eventim.de/event/luciano-seductive-tour-lanxess-arena-17385701/?affiliate=TUG#tab=vip_packages-17489755")
+
+Quit the driver after completing the actions
+driver.quit()
+
 
