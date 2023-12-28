@@ -43,6 +43,4 @@ def websiteWill(url):
             new_ticket_name.append(n.text)
     return [number_of_ticket, new_ticket_name]
 
-print(websiteWill('https://www.willhaben.at/iad/kaufen-und-verkaufen/marktplatz?sfId=43577eec-a5e9-42d8-84a4-e493265e3f62&isNavigation=true&isISRL=true&keyword=ticket'))
-
 #good to go

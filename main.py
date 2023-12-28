@@ -51,25 +51,22 @@ if __name__ == '__main__':
 
 
         if args.all:
-            [eventtim_number, eventtim_list] = eventtim(args.all)
-            [fansale_number, fansale_list] = websiteFansale(args.all)
+            diff_eventtim = eventtim(args.all)
+            diff_fansale = websiteFansale(args.all)
             [kleinanzeigen_number, kleinanzeigen_list] = websiteklein(args.all)
             [willhaben_number, willhaben_list] = websiteWill(args.all)
 
             while True:
-                [new_eventtim_number, new_eventtim_list] = eventtim(args.all)
-                [new_fansale_number, new_fansale_list] = websiteFansale(args.all)
+                new_dif_eventtim = eventtim(args.all)
+                new_diff_fansale = websiteFansale(args.all)
                 [new_kleinanzeigen_number, new_kleinanzeigen_list] = websiteklein(args.all)
                 [new_willhaben_number, new_willhaben_list] = websiteWill(args.all)
-
-                ediff = diffBetween(new_eventtim_number, new_eventtim_list, eventtim_number, eventtim_list)
-                if len(ediff):
-                    eventtim_number, eventtim_list = new_eventtim_number, new_eventtim_list
-                    sendMessage("website: eventtim",str(ediff))
+                
+                if dif_eventtim != new_dif_eventtim:
+                    sendMessage("website: eventtim changes")
                     print('updated')
 
-                fdiff = diffBetween(new_fansale_number, new_fansale_list, fansale_number, fansale_list)
-                if len(fdiff):
+                if diff_fansale != new_diff_fansale:
                     fansale_number, fansale_list = new_fansale_number, new_fansale_list
                     sendMessage("wensite: fansale", str(fdiff))
 
@@ -85,10 +82,10 @@ if __name__ == '__main__':
 
                 time.sleep(20)
         if args.e:
-            [eventtim_number, eventtim_list] = eventtim(args.e)
+            diff_eventtim = eventtim(args.e)
 
         if args.f:
-            [fansale_number, fansale_list] = websiteFansale(args.f)
+            diff_fansale = websiteFansale(args.f)
 
         if args.k:
             [kleinanzeigen_number, kleinanzeigen_list] = websiteklein(args.k)
@@ -98,21 +95,17 @@ if __name__ == '__main__':
 
         while args.e or args.f or args.k or args.w:
             if args.e:
-                [new_eventtim_number, new_eventtim_list] = eventtim(args.e)
-
-                ediff = diffBetween(new_eventtim_number, new_eventtim_list, eventtim_number, eventtim_list)
-                if len(ediff):
-                    eventtim_number, eventtim_list = new_eventtim_number, new_eventtim_list
-                    sendMessage("website: eventtim",str(ediff))
+                new_diff_eventtim = eventtim(args.e)
+                if diff_eventtim != new_diff_eventtim :
+                    sendMessage("website: eventtim changes")
                     print('updated')
 
             if args.f:
-                [new_fansale_number, new_fansale_list] = websiteFansale(args.f)
+                new_diff_fansale = websiteFansale(args.f)
 
-                fdiff = diffBetween(new_fansale_number, new_fansale_list, fansale_number, fansale_list)
-                if len(fdiff):
+                if new_diff_fansale != diff_fansale:
                     fansale_number, fansale_list = new_fansale_number, new_fansale_list
-                    sendMessage("wensite: fansale", str(fdiff))
+                    sendMessage("wensite: fansale \n available")
 
 
             if args.k:

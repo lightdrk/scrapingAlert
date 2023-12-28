@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from connect import connection
+from .connect import connection
 import re
 
 
@@ -31,7 +31,5 @@ def websiteklein(url):
     page_num = filterNumber(number_of_ticket[2])
 
     return [page_num, new_ticket_name]
-
-print(websiteklein('https://www.kleinanzeigen.de/s-eintrittskarten-tickets/rickert/c231l11752'))
 
 #good to go

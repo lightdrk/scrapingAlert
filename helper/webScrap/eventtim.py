@@ -17,20 +17,13 @@ def filterNumber(number):
     return int(num)
 
 
-def eventtim(tag):
+def eventtim(url):
     driver = webdriver.Chrome()
-    driver.get(f"https://www.eventim.de/search/?affiliate=EVE&searchterm={tag}")
+    driver.get(url)
     time.sleep(5)
     html = driver.page_source
-    script = '''return document.querySelectorAll("div[class='search-result-content']")[0].outerText'''
+    script = '''return document.getElementsByClassName('btn btn-alternative btn-sm btn-stepper-right js-tracking js-stepper-more disabled')'''
     text = driver.execute_script(script)
-    html = driver.page_source
-    soup = BeautifulSoup(html,"html.parser")
-    list_ticket_name = soup.find_all("div", class_="event-listing-city theme-text-color")
-    new_ticket_name = []
-    for n in list_ticket_name:
-        new_ticket_name.append(n.text)
-    number = filterNumber(text)
-
-    return [number, new_ticket_name]
+    print(text)
+    return text
 
